@@ -48,9 +48,10 @@
             </p>
         </div>
 
-        <button class="btn btn-primary">
+        <a class="btn btn-primary" href="{{ route('todos.create') }}">
             + Add Todo
-        </button>
+        </a>
+
 
     </div>
 
@@ -112,21 +113,37 @@
 
                     <td>
 
-                        {{ \Carbon\Carbon::parse($todo->deadline)->format('M d, Y') }}
+                        @if($todo->deadline)
+                            {{ \Carbon\Carbon::parse($todo->deadline)->format('M d, Y') }}
+                        @else
+                            <span class="text-muted">—</span>
+                        @endif
 
                     </td>
+
 
                     <td>
 
-                        <button class="btn btn-warning btn-sm">
+                        <a class="btn btn-warning btn-sm" href="{{ route('todos.edit', $todo) }}">
                             Edit
-                        </button>
+                        </a>
 
-                        <button class="btn btn-danger btn-sm">
-                            Delete
-                        </button>
+                        <form
+                            action="{{ route('todos.destroy', $todo) }}"
+                            method="POST"
+                            class="d-inline"
+                            onsubmit="return confirm('Delete this todo?')"
+                        >
+                            @csrf
+                            @method('DELETE')
+
+                            <button type="submit" class="btn btn-danger btn-sm">
+                                Delete
+                            </button>
+                        </form>
 
                     </td>
+
 
                 </tr>
 
